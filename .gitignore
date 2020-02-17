@@ -11,8 +11,11 @@ OpenWithMenu_i.h
 OpenWithMenu_p.c
 dlldata.c
 ReadMe.txt
+*.aps
 
 # Project
+bin/
+obj/
 Debug/
 Release/
 x64/
