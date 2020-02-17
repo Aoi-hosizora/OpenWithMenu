@@ -17,6 +17,9 @@
       <UniqueIdentifier>{ac5b18d0-de40-431c-99de-178ab21b4a56}</UniqueIdentifier>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="src\ext\menu">
+      <UniqueIdentifier>{90f4cdbf-26e9-4d8f-a9dc-17ebf5a11eb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenWithMenu_i.c">
@@ -30,6 +33,9 @@
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenWithMenuImpl.cpp">
+      <Filter>src\ext\menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -48,6 +54,9 @@
     <ClInclude Include="dllmain.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="OpenWithMenuImpl.h">
+      <Filter>src\ext\menu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -56,6 +65,9 @@
       <Filter>src\ext</Filter>
     </None>
     <None Include="OpenWithMenu.rgs">
+      <Filter>src\res</Filter>
+    </None>
+    <None Include="OpenWithMenuImpl.rgs">
       <Filter>src\res</Filter>
     </None>
   </ItemGroup>
