@@ -26,3 +26,7 @@ register.bat /r
 # Unregister dll
 register.bat /u
 ```
+
+### References
+
++ [メニューにアイコンを付ける](http://home.a00.itscom.net/hatada/windows/tips/iconmenu.html)

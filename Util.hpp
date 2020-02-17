@@ -7,6 +7,8 @@
 #include "stdafx.h"
 #include <atlconv.h>
 #include <string>
+#include <fstream>
+#include <sys/stat.h>
 
 #define REG_SZ_MAX 1024
 
@@ -30,7 +32,32 @@ public:
         return r;
     }
 
-    static LONG GetStringRegKey(HKEY hKey, const std::wstring &strValueName, std::wstring &strValue, const std::wstring &strDefaultValue) {
+    static std::wstring trimPath(const std::wstring &str) {
+        std::wstring copy = str;
+        while (!str.empty() && (copy.at(0) == L' ' || copy.at(0) == L'"')) {
+            copy = copy.substr(1);
+        }
+        int l = copy.length() - 1;
+        while (!str.empty() && (copy.at(l) == L' ' || copy.at(l) == L'"')) {
+            copy = copy.substr(0, l);
+            l = copy.length() - 1;
+        }
+        return copy;
+    }
+
+    static std::wstring getFilename(const std::wstring &path) {
+        if (path == L"") {
+            return L"";
+        }
+        WCHAR szDrive[REG_SZ_MAX];
+        WCHAR szDir[REG_SZ_MAX];
+        WCHAR szFname[REG_SZ_MAX];
+        WCHAR szExt[REG_SZ_MAX];
+        _wsplitpath(path.c_str(), szDrive, szDir, szFname, szExt);
+        return std::wstring(szFname) + std::wstring(szExt);
+    }
+
+    static LONG readRegSz(HKEY hKey, const std::wstring &strValueName, std::wstring &strValue, const std::wstring &strDefaultValue) {
         strValue = strDefaultValue;
         WCHAR szBuffer[REG_SZ_MAX];
         DWORD dwBufferSize = sizeof(szBuffer);
@@ -39,5 +66,45 @@ public:
             strValue = szBuffer;
         }
         return nError;
+    }
+
+    static bool exist(const std::wstring &path) {
+        struct _stat64i32 buffer;
+        return (_wstat(path.c_str(), &buffer) == 0); 
+    }
+
+    static HICON GetSmallIcon(const std::wstring &path) {
+        HICON largeIcon, smallIcon;
+        int num = ExtractIconEx(path.c_str(), -1, nullptr, nullptr, 0);
+        if (num <= 0) {
+            return nullptr;
+        }
+        ExtractIconEx(path.c_str(), 0, &largeIcon, &smallIcon, num);
+        return smallIcon;
+        // return ExtractIcon(nullptr, path.c_str(), 0);
+    }
+
+    static HBITMAP CreateBitmapARGB(int nWidth, int nHeight) {
+        LPVOID     lpBits;
+        BITMAPINFO bmi;
+        memset(&bmi, 0, sizeof(BITMAPINFO));
+        bmi.bmiHeader.biSize      = sizeof(BITMAPINFOHEADER);
+        bmi.bmiHeader.biWidth     = nWidth;
+        bmi.bmiHeader.biHeight    = nHeight;
+        bmi.bmiHeader.biPlanes    = 1;
+        bmi.bmiHeader.biBitCount  = 32;
+        return CreateDIBSection(nullptr, (BITMAPINFO*)&bmi, DIB_RGB_COLORS, &lpBits, nullptr, 0);
+    }
+
+    static HBITMAP GetBitmapFromIcon(HICON hicon) {
+        UINT uWidth  = GetSystemMetrics(SM_CXSMICON);
+        UINT uHeight = GetSystemMetrics(SM_CYSMICON);
+        HBITMAP hbmp = Util::CreateBitmapARGB(uWidth, uHeight);
+        HDC hdcMem = CreateCompatibleDC(nullptr);
+        auto hbmpPrev = (HBITMAP) SelectObject(hdcMem, hbmp);
+        DrawIconEx(hdcMem, 0, 0, hicon, uWidth, uHeight, 0, nullptr, DI_NORMAL);
+        SelectObject(hdcMem, hbmpPrev);
+        DeleteDC(hdcMem);
+        return hbmp;
     }
 };

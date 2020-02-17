@@ -7,7 +7,8 @@ class MenuItemSetting {
 public:
     std::wstring name;
     std::wstring path;
+    std::wstring icon;
 
     MenuItemSetting() { }
-    MenuItemSetting(std::wstring name, std::wstring path) : name(name), path(path) { }
+    MenuItemSetting(std::wstring name, std::wstring path, std::wstring icon) : name(name), path(path), icon(icon) { }
 };
