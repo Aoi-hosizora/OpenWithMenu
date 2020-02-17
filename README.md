@@ -27,7 +27,17 @@ register.bat /r
 register.bat /u
 ```
 
++ Setting
+
+```bash
+# HKEY_CURRENT_USER\Software\AoiHosizora\OpenFolderWith
+```
+
+### Screenshot
+
+![screenshot](./assets/Screenshot.jpg)
+
 ### References
 
-+ [メニューにアイコンを付ける](http://home.a00.itscom.net/hatada/windows/tips/iconmenu.html)
++ [繝｡繝九Η繝ｼ縺ｫ繧｢繧､繧ｳ繝ｳ繧剃ｻ倥￠繧犠(http://home.a00.itscom.net/hatada/windows/tips/iconmenu.html)
 + [Icon Extractor Shell Extension](https://www.codeproject.com/Articles/1139/Icon-Extractor-Shell-Extension)
