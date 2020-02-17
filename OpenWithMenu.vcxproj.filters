@@ -20,6 +20,9 @@
     <Filter Include="src\ext\menu">
       <UniqueIdentifier>{90f4cdbf-26e9-4d8f-a9dc-17ebf5a11eb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{c281e6af-1313-4237-8ee0-304e8ec3e8e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenWithMenu_i.c">
@@ -35,6 +38,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="OpenWithMenuImpl.cpp">
+      <Filter>src\ext\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuItemSetting.h">
       <Filter>src\ext\menu</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,6 +63,9 @@
     <ClInclude Include="OpenWithMenuImpl.h">
       <Filter>src\ext\menu</Filter>
     </ClInclude>
+    <ClInclude Include="Util.hpp">
+      <Filter>src\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -71,7 +80,6 @@
       <Filter>src\res</Filter>
     </None>
     <None Include="register.bat" />
-    <None Include="menu.reg" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="OpenWithMenu.idl">

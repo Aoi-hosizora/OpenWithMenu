@@ -214,6 +214,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="MenuItemSetting.h" />
     <ClCompile Include="OpenWithMenu.cpp" />
     <ClCompile Include="OpenWithMenuImpl.cpp" />
     <ClCompile Include="OpenWithMenu_i.c">
@@ -244,13 +245,13 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Util.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenWithMenu.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="menu.reg" />
     <None Include="OpenWithMenu.def" />
     <None Include="OpenWithMenu.rgs" />
     <None Include="OpenWithMenuImpl.rgs" />
