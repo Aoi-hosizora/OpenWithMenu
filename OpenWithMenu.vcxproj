@@ -240,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dllmain.h" />
+    <ClInclude Include="IconUtil.hpp" />
     <ClInclude Include="OpenWithMenuImpl.h" />
     <ClInclude Include="OpenWithMenu_i.h" />
     <ClInclude Include="Resource.h" />
