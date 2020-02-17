@@ -70,6 +70,8 @@
     <None Include="OpenWithMenuImpl.rgs">
       <Filter>src\res</Filter>
     </None>
+    <None Include="register.bat" />
+    <None Include="menu.reg" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="OpenWithMenu.idl">

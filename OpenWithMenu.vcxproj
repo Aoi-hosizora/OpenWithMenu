@@ -250,10 +250,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="menu.reg" />
     <None Include="OpenWithMenu.def" />
     <None Include="OpenWithMenu.rgs" />
     <None Include="OpenWithMenuImpl.rgs" />
     <None Include="README.md" />
+    <None Include="register.bat" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="OpenWithMenu.idl" />
