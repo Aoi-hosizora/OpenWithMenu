@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenWithMenu", "OpenWithMenu.vcxproj", "{4CCE89CB-C828-450F-A076-4C0361CA7550}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenWithMenuPS", "OpenWithMenuPS.vcxproj", "{BB268E7D-2689-4914-BA32-F4583CFC382A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4CCE89CB-C828-450F-A076-4C0361CA7550} = {4CCE89CB-C828-450F-A076-4C0361CA7550}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4CCE89CB-C828-450F-A076-4C0361CA7550}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4CCE89CB-C828-450F-A076-4C0361CA7550}.Debug|Win32.Build.0 = Debug|Win32
+		{4CCE89CB-C828-450F-A076-4C0361CA7550}.Release|Win32.ActiveCfg = Release|Win32
+		{4CCE89CB-C828-450F-A076-4C0361CA7550}.Release|Win32.Build.0 = Release|Win32
+		{BB268E7D-2689-4914-BA32-F4583CFC382A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BB268E7D-2689-4914-BA32-F4583CFC382A}.Release|Win32.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,24 @@
+# Visual Studio
+*.suo
+*.user
+*.opensdf
+*.sdf
+ipch/
+
+# ATL
+OpenWithMenu_i.c
+OpenWithMenu_i.h
+OpenWithMenu_p.c
+dlldata.c
+ReadMe.txt
+
+# Project
+Debug/
+Release/
+x64/
+Win32/
+
+# My
+.history/
+.vscode/
+.ionide/
