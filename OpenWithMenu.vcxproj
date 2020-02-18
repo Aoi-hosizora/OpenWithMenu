@@ -253,11 +253,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="install.reg" />
     <None Include="OpenWithMenu.def" />
     <None Include="OpenWithMenu.rgs" />
     <None Include="OpenWithMenuImpl.rgs" />
     <None Include="README.md" />
+    <None Include="regedit.vbs" />
     <None Include="register.bat" />
+    <None Include="uninstall.reg" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="OpenWithMenu.idl" />

@@ -5,12 +5,16 @@
 
 class MenuItemSetting {
 public:
+    // (Šù’è)
     std::wstring name;
-    std::wstring path;
+    // Command
+    std::wstring command;
+    // Icon
     std::wstring icon;
-    std::wstring script;
+    // Runas
+    bool runas;
 
     MenuItemSetting() { }
-    MenuItemSetting(std::wstring name, std::wstring path, std::wstring icon, std::wstring script) 
-        : name(name), path(path), icon(icon), script(script) { }
+    MenuItemSetting(std::wstring name, std::wstring command, std::wstring icon, bool runas) 
+        : name(name), command(command), icon(icon), runas(runas) { }
 };

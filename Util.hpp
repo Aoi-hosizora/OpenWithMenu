@@ -33,7 +33,7 @@ public:
         while (!str.empty() && (copy.at(0) == L' ' || copy.at(0) == L'"')) {
             copy = copy.substr(1);
         }
-        int l = copy.length() - 1;
+        size_t l = copy.length() - 1;
         while (!str.empty() && (copy.at(l) == L' ' || copy.at(l) == L'"')) {
             copy = copy.substr(0, l);
             l = copy.length() - 1;
@@ -41,27 +41,36 @@ public:
         return copy;
     }
 
+    static std::wstring replaceAll(const std::wstring &str, const std::wstring &src, const std::wstring &dst) {
+        std::wstring cpy = str;
+        int pos = 0;
+        int srclen = src.size();
+        int dstlen = dst.size();
+
+        while ((pos=str.find(src, pos)) != std::string::npos) {
+            cpy.replace(pos, srclen, dst);
+            pos += dstlen;
+        }
+        return cpy;
+    }
+
     static std::wstring getFilename(const std::wstring &path) {
-        if (path == L"") {
+        if (path.empty()) {
             return L"";
         }
         WCHAR szDrive[REG_SZ_MAX];
         WCHAR szDir[REG_SZ_MAX];
         WCHAR szFname[REG_SZ_MAX];
         WCHAR szExt[REG_SZ_MAX];
-        _wsplitpath(path.c_str(), szDrive, szDir, szFname, szExt);
+        _wsplitpath_s(path.c_str(), szDrive, szDir, szFname, szExt);
         return std::wstring(szFname) + std::wstring(szExt);
     }
 
-    static LONG readRegSz(HKEY hKey, const std::wstring &strValueName, std::wstring &strValue, const std::wstring &strDefaultValue) {
-        strValue = strDefaultValue;
-        WCHAR szBuffer[REG_SZ_MAX];
-        DWORD dwBufferSize = sizeof(szBuffer);
-        ULONG nError = RegQueryValueExW(hKey, strValueName.c_str(), nullptr, nullptr, (LPBYTE)szBuffer, &dwBufferSize);
-        if (ERROR_SUCCESS == nError) {
-            strValue = szBuffer;
-        }
-        return nError;
+    static std::pair<std::wstring, LONG> readRegSz(HKEY hKey, const std::wstring &val, const std::wstring &def) {
+        WCHAR buf[REG_SZ_MAX];
+        DWORD bufSize = sizeof(buf);
+        ULONG nError = RegQueryValueExW(hKey, val.c_str(), nullptr, nullptr, (LPBYTE) buf, &bufSize);
+        return std::make_pair<std::wstring, LONG>(ERROR_SUCCESS == nError ? buf : def, nError);
     }
 
     static bool exist(const std::wstring &path) {

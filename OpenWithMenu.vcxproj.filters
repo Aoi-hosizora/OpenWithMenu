@@ -23,6 +23,9 @@
     <Filter Include="src\util">
       <UniqueIdentifier>{c281e6af-1313-4237-8ee0-304e8ec3e8e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="script">
+      <UniqueIdentifier>{00a61971-fb06-4d1a-ad74-5eb9d7fadb3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenWithMenu_i.c">
@@ -82,7 +85,18 @@
     <None Include="OpenWithMenuImpl.rgs">
       <Filter>src\res</Filter>
     </None>
-    <None Include="register.bat" />
+    <None Include="install.reg">
+      <Filter>script</Filter>
+    </None>
+    <None Include="register.bat">
+      <Filter>script</Filter>
+    </None>
+    <None Include="uninstall.reg">
+      <Filter>script</Filter>
+    </None>
+    <None Include="regedit.vbs">
+      <Filter>script</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="OpenWithMenu.idl">
