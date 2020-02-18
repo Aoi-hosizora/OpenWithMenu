@@ -72,6 +72,12 @@
     <ClInclude Include="IconUtil.hpp">
       <Filter>src\util</Filter>
     </ClInclude>
+    <ClInclude Include="RegUtil.hpp">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>src\def</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

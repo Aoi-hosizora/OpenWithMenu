@@ -6,8 +6,6 @@
 #include <fstream>
 #include <sys/stat.h>
 
-#define REG_SZ_MAX 1024
-
 class Util {
 public:
     static std::string i2s(const int num) {
@@ -58,19 +56,12 @@ public:
         if (path.empty()) {
             return L"";
         }
-        WCHAR szDrive[REG_SZ_MAX];
-        WCHAR szDir[REG_SZ_MAX];
-        WCHAR szFname[REG_SZ_MAX];
-        WCHAR szExt[REG_SZ_MAX];
+        WCHAR szDrive[REG_PATH_MAX];
+        WCHAR szDir[REG_PATH_MAX];
+        WCHAR szFname[REG_PATH_MAX];
+        WCHAR szExt[REG_PATH_MAX];
         _wsplitpath_s(path.c_str(), szDrive, szDir, szFname, szExt);
         return std::wstring(szFname) + std::wstring(szExt);
-    }
-
-    static std::pair<std::wstring, LONG> readRegSz(HKEY hKey, const std::wstring &val, const std::wstring &def) {
-        WCHAR buf[REG_SZ_MAX];
-        DWORD bufSize = sizeof(buf);
-        ULONG nError = RegQueryValueExW(hKey, val.c_str(), nullptr, nullptr, (LPBYTE) buf, &bufSize);
-        return std::make_pair<std::wstring, LONG>(ERROR_SUCCESS == nError ? buf : def, nError);
     }
 
     static bool exist(const std::wstring &path) {
