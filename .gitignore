@@ -25,3 +25,4 @@ Win32/
 .history/
 .vscode/
 .ionide/
+build/
