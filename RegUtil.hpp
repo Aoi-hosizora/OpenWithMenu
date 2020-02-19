@@ -29,8 +29,8 @@ public:
     }
 
     static std::pair<std::wstring, LONG> readRegSz(HKEY hKey, const std::wstring &val, const std::wstring &def) {
-        WCHAR buf[REG_SZ_MAX];
-        DWORD bufSize = sizeof(buf);
+        TCHAR buf[REG_SZ_MAX];
+        DWORD bufSize = sizeof(buf) / sizeof(buf[0]);
         // RegQueryValueExW(HKEY hKey, LPCWSTR lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData);
         ULONG nError = RegQueryValueEx(hKey, val.c_str(), nullptr, nullptr, (LPBYTE) buf, &bufSize);
         return std::make_pair<std::wstring, LONG>(ERROR_SUCCESS == nError ? buf : def, nError);
