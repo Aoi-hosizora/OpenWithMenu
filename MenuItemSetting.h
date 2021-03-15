@@ -6,15 +6,15 @@
 class MenuItemSetting {
 public:
     // (Šù’è)
-    std::wstring name;
+    std::wstring name = L"";
     // Command
-    std::wstring command;
+    std::wstring command = L"";
     // Icon
-    std::wstring icon;
+    std::wstring icon = L"";
     // Runas
-    bool runas;
+    bool runas = false;
 
     MenuItemSetting() { }
-    MenuItemSetting(std::wstring name, std::wstring command, std::wstring icon, bool runas) 
+    MenuItemSetting(std::wstring name, std::wstring command, std::wstring icon, bool runas)
         : name(name), command(command), icon(icon), runas(runas) { }
 };

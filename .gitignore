@@ -1,11 +1,19 @@
-# Visual Studio
+### Editor ###
+.vscode/
+.ionide/
+.history/
+.idea/
+.vs/
+
+### VS ###
+ipch/
 *.suo
 *.user
 *.opensdf
 *.sdf
-ipch/
+*.rdb
 
-# ATL
+### Generate ###
 OpenWithMenu_i.c
 OpenWithMenu_i.h
 OpenWithMenu_p.c
@@ -13,16 +21,13 @@ dlldata.c
 ReadMe.txt
 *.aps
 
-# Project
-bin/
-obj/
-Debug/
-Release/
-x64/
-Win32/
-
-# My
-.history/
-.vscode/
-.ionide/
-build/
+### Build ###
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Xx]86/
+[Xx]64/
+[Ww]in32/
+[Ww]in64/
+[Bb]uild/

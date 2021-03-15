@@ -17,9 +17,7 @@ public:
         int index = 0;
         TCHAR keyName[REG_KEY_MAX];
         DWORD keyNameSize = sizeof(keyName) / sizeof(keyName[0]);
-        // RegEnumKeyExW(
-        //     HKEY hKey, DWORD dwIndex, LPWSTR lpName, LPDWORD lpcchName, LPDWORD lpReserved,
-        //     LPWSTR lpClass, LPDWORD lpcchClass, PFILETIME lpftLastWriteTime);
+        // RegEnumKeyExW(HKEY hKey, DWORD dwIndex, LPWSTR lpName, LPDWORD lpcchName, LPDWORD lpReserved, LPWSTR lpClass, LPDWORD lpcchClass, PFILETIME lpftLastWriteTime);
         while (RegEnumKeyEx(*hKey, index, keyName, &keyNameSize, nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS) {
             keyNameSize = sizeof(keyName) / sizeof(keyName[0]);
             index++;
@@ -28,11 +26,12 @@ public:
         return keyNames;
     }
 
-    static std::pair<std::wstring, LONG> readRegSz(HKEY hKey, const std::wstring &val, const std::wstring &def) {
+    static LONG readRegSz(HKEY hKey, const std::wstring &val, const std::wstring &def, std::wstring &out) {
         TCHAR buf[REG_SZ_MAX];
         DWORD bufSize = sizeof(buf) / sizeof(buf[0]);
         // RegQueryValueExW(HKEY hKey, LPCWSTR lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData);
         ULONG nError = RegQueryValueEx(hKey, val.c_str(), nullptr, nullptr, (LPBYTE) buf, &bufSize);
-        return std::make_pair<std::wstring, LONG>(ERROR_SUCCESS == nError ? buf : def, nError);
+        out = (nError == ERROR_SUCCESS) ? buf : def;
+        return nError;
     }
 };

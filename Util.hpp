@@ -17,8 +17,8 @@ public:
     }
 
     static std::wstring s2ws(const std::string &s) {
-        int strLen = (int)s.length() + 1;
-        int wstrLen = MultiByteToWideChar(CP_ACP, 0, s.c_str(), strLen, nullptr, 0); 
+        int strLen = (int) s.length() + 1;
+        int wstrLen = MultiByteToWideChar(CP_ACP, 0, s.c_str(), strLen, nullptr, 0);
         auto buf = new wchar_t[wstrLen];
         MultiByteToWideChar(CP_ACP, 0, s.c_str(), strLen, buf, wstrLen);
         std::wstring r(buf);
@@ -45,7 +45,7 @@ public:
         int srclen = src.size();
         int dstlen = dst.size();
 
-        while ((pos=str.find(src, pos)) != std::string::npos) {
+        while ((pos = str.find(src, pos)) != std::string::npos) {
             cpy.replace(pos, srclen, dst);
             pos += dstlen;
         }
@@ -66,6 +66,6 @@ public:
 
     static bool exist(const std::wstring &path) {
         struct _stat64i32 buffer;
-        return (_wstat(path.c_str(), &buffer) == 0); 
+        return (_wstat(path.c_str(), &buffer) == 0);
     }
 };

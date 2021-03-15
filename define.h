@@ -8,7 +8,4 @@
 #define REG_SZ_MAX    1024
 #define REG_PATH_MAX  1024
 
-#define MENU_ID_SETTING  0
-#define MENU_ID_BEGIN    1
-
 #define LOG(_data) MessageBox(nullptr, _data, L"", MB_OK)
