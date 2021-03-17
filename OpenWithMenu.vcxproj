@@ -268,7 +268,9 @@
     <None Include="README.md" />
     <None Include="regedit.vbs" />
     <None Include="register.bat" />
+    <None Include="Register.reg" />
     <None Include="uninstall.reg" />
+    <None Include="Unregister.reg" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="OpenWithMenu.idl" />

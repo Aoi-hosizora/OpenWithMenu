@@ -7,11 +7,14 @@ class IconUtil {
 public:
     static HICON GetSmallIcon(const std::wstring &path) {
         HICON largeIcon, smallIcon;
-        int num = ExtractIconEx(path.c_str(), -1, nullptr, nullptr, 0);
-        if (num <= 0) {
+        UINT num = ExtractIconEx(path.c_str(), -1, nullptr, nullptr, 0);
+        if (num <= 0 || num == UINT_MAX) {
             return nullptr;
         }
-        ExtractIconEx(path.c_str(), 0, &largeIcon, &smallIcon, num);
+        num = ExtractIconEx(path.c_str(), 0, &largeIcon, &smallIcon, 1);
+        if (num == UINT_MAX) {
+            return nullptr;
+        }
         return smallIcon;
     }
 
@@ -27,15 +30,16 @@ public:
         return CreateDIBSection(nullptr, (BITMAPINFO *) &bmi, DIB_RGB_COLORS, &lpBits, nullptr, 0);
     }
 
-    static HBITMAP GetBitmapFromIcon(HICON hicon) {
-        UINT uWidth = GetSystemMetrics(SM_CXSMICON);
-        UINT uHeight = GetSystemMetrics(SM_CYSMICON);
-        HBITMAP hbmp = CreateBitmapARGB(uWidth, uHeight);
+    static HBITMAP GetBitmapFromIcon(HICON hIcon) {
+        int uWidth = GetSystemMetrics(SM_CXSMICON);
+        int uHeight = GetSystemMetrics(SM_CYSMICON);
+
+        HBITMAP hBmp = CreateBitmapARGB(uWidth, uHeight);
         HDC hdcMem = CreateCompatibleDC(nullptr);
-        auto hbmpPrev = (HBITMAP) SelectObject(hdcMem, hbmp);
-        DrawIconEx(hdcMem, 0, 0, hicon, uWidth, uHeight, 0, nullptr, DI_NORMAL);
+        auto hbmpPrev = (HBITMAP) SelectObject(hdcMem, hBmp);
+        DrawIconEx(hdcMem, 0, 0, hIcon, uWidth, uHeight, 0, nullptr, DI_NORMAL); // may panic
         SelectObject(hdcMem, hbmpPrev);
         DeleteDC(hdcMem);
-        return hbmp;
+        return hBmp;
     }
 };

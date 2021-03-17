@@ -103,6 +103,8 @@
     <None Include="regedit.vbs">
       <Filter>script</Filter>
     </None>
+    <None Include="Register.reg" />
+    <None Include="Unregister.reg" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="OpenWithMenu.idl">
