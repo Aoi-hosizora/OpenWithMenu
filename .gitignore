@@ -5,7 +5,7 @@
 .idea/
 .vs/
 
-### VS ###
+### Project ###
 ipch/
 *.suo
 *.user
@@ -14,14 +14,14 @@ ipch/
 *.rdb
 
 ### Generate ###
-OpenWithMenu_i.c
-OpenWithMenu_i.h
-OpenWithMenu_p.c
-dlldata.c
-ReadMe.txt
 *.aps
+*_i.c
+*_i.h
+*_p.c
+dlldata.c
 
 ### Build ###
+[Bb]uild/
 [Bb]in/
 [Oo]bj/
 [Dd]ebug/
@@ -30,4 +30,3 @@ ReadMe.txt
 [Xx]64/
 [Ww]in32/
 [Ww]in64/
-[Bb]uild/
