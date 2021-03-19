@@ -7,8 +7,12 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::Initialize(
     __in_opt HKEY hkeyProgID
 ) {
     this->curr_folder = pidlFolder;
+    Utils::ReadRegistryConfigs(&configs); // ignore error
     return S_OK;
 }
+
+const UINT MENUID_SETTING = 0;
+const UINT MENUID_BEGIN = 1;
 
 HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
     __in HMENU hmenu,
@@ -27,7 +31,47 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
         return S_FALSE;
     }
 
-    return S_OK;
+    // sub menu
+    HMENU sub_menu = CreateMenu();
+
+    // temp mii
+    MENUITEMINFO mii;
+    mii.cbSize = sizeof(MENUITEMINFO);
+    mii.fMask = MIIM_STRING | MIIM_ID;
+
+    // splitter mii
+    MENUITEMINFO mii_splitter;
+    mii_splitter.cbSize = sizeof(MENUITEMINFO);
+    mii_splitter.fMask = MIIM_FTYPE;
+    mii_splitter.fType = MFT_SEPARATOR;
+
+    // command count
+    UINT cmd_count = 0;
+
+    // setting menu item
+    mii.dwTypeData = L"Setting...(&S)";
+    mii.wID = idCmdFirst + MENUID_SETTING;
+    InsertMenuItem(sub_menu, 0, true, &mii);
+    InsertMenuItem(sub_menu, 1, true, &mii_splitter);
+    cmd_count++;
+
+    for (int i = 0; i < this->configs.size(); i++) {
+        auto config = this->configs.at(i);
+        mii.dwTypeData = _wcsdup((std::to_wstring(i) + L": " + config.name).c_str());
+        mii.wID = idCmdFirst + MENUID_BEGIN + i;
+        InsertMenuItem(sub_menu, 2 + i, true, &mii);
+        cmd_count++;
+    }
+
+    // out layer menu
+    MENUITEMINFO mii_out;
+    mii_out.cbSize = sizeof(MENUITEMINFO);
+    mii_out.fMask = MIIM_STRING | MIIM_SUBMENU;
+    mii_out.dwTypeData = L"Open folder with(&F)";
+    mii_out.hSubMenu = sub_menu;
+    InsertMenuItem(hmenu, indexMenu, true, &mii_out);
+
+    return MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_NULL, cmd_count);
 }
 
 HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::InvokeCommand(
@@ -41,10 +85,26 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::InvokeCommand(
         return S_FALSE;
     }
 
+    // =======
+    // setting
+    // =======
 
-    switch (idCmd) {
-        // TODO
+    if (idCmd == MENUID_SETTING) {
+        ShellExecute(nullptr, L"runas", L"cmd.exe", (L"/C regjump " + Utils::GetConfigRegistryPath()).c_str(), nullptr, SW_HIDE);
+        return S_OK;
     }
+
+    // =====
+    // other
+    // =====
+
+    auto config = this->configs.at(idCmd - MENUID_BEGIN);
+    std::wstring current_path;
+    if (!Utils::GetFolderNameFromItemIDList(this->curr_folder, &current_path)) {
+        MessageBox(nullptr, L"Failed to get folder information.", L"Open with", MB_OK);
+        return S_FALSE;
+    }
+    MessageBox(nullptr, (config.command + L"\n" + current_path).c_str(), L"Open with", MB_OK);
 
     return S_OK;
 }

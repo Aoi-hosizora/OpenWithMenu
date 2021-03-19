@@ -40,6 +40,12 @@
     <ClInclude Include="OpenWithMenuImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MenuItemConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenWithMenu.cpp">
