@@ -49,7 +49,7 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
     UINT cmd_count = 0;
 
     // setting menu item
-    mii.dwTypeData = L"Setting...(&S)";
+    mii.dwTypeData = L"Setting(&S)";
     mii.wID = idCmdFirst + MENUID_SETTING;
     InsertMenuItem(sub_menu, 0, true, &mii);
     InsertMenuItem(sub_menu, 1, true, &mii_splitter);
@@ -59,6 +59,14 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
         auto config = this->configs.at(i);
         mii.dwTypeData = _wcsdup((std::to_wstring(i) + L": " + config.name).c_str());
         mii.wID = idCmdFirst + MENUID_BEGIN + i;
+        HBITMAP hbmp = Utils::GetSmallBitmapIconFromPath(config.icon);
+        if (hbmp != nullptr) {
+            mii.fMask |= MIIM_BITMAP;
+            mii.hbmpItem = hbmp;
+        } else {
+            mii.fMask &= ~MIIM_BITMAP;
+            mii.hbmpItem = nullptr;
+        }
         InsertMenuItem(sub_menu, 2 + i, true, &mii);
         cmd_count++;
     }
@@ -85,26 +93,22 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::InvokeCommand(
         return S_FALSE;
     }
 
-    // =======
     // setting
-    // =======
-
     if (idCmd == MENUID_SETTING) {
         ShellExecute(nullptr, L"runas", L"cmd.exe", (L"/C regjump " + Utils::GetConfigRegistryPath()).c_str(), nullptr, SW_HIDE);
         return S_OK;
     }
 
-    // =====
     // other
-    // =====
-
     auto config = this->configs.at(idCmd - MENUID_BEGIN);
     std::wstring current_path;
     if (!Utils::GetFolderNameFromItemIDList(this->curr_folder, &current_path)) {
         MessageBox(nullptr, L"Failed to get folder information.", L"Open with", MB_OK);
         return S_FALSE;
     }
-    MessageBox(nullptr, (config.command + L"\n" + current_path).c_str(), L"Open with", MB_OK);
+    std::wstring op = config.runas ? L"runas" : L"open";
+    std::wstring command = L"/C " + Utils::ReplaceWstring(config.command, L"%V", current_path); // %V -> current_path
+    ShellExecute(nullptr, op.c_str(), L"cmd.exe", command.c_str(), current_path.c_str(), SW_HIDE);
 
     return S_OK;
 }
