@@ -1,0 +1,18 @@
+// OpenWithMenu.idl : IDL source for OpenWithMenu
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (OpenWithMenu.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(fcc24c18-b7a6-45a5-bd80-9dd95ab59302),
+	version(1.0),
+]
+library OpenWithMenuLib
+{
+	importlib("stdole2.tlb");
+};
+
