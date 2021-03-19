@@ -37,6 +37,9 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OpenWithMenuImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenWithMenu.cpp">
@@ -51,6 +54,9 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OpenWithMenuImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenWithMenu.rc">
@@ -63,6 +69,12 @@
     </None>
     <None Include="OpenWithMenu.def">
       <Filter>Source Files</Filter>
+    </None>
+    <None Include="OpenWithMenuImpl.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="OpenMenuWithImpl.rgs">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

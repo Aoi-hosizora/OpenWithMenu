@@ -8,11 +8,28 @@ import "oaidl.idl";
 import "ocidl.idl";
 
 [
+	object,
+	uuid(1c74df51-b098-4826-8810-b939a9aa10c5),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IOpenWithMenuImpl : IDispatch
+{
+};
+[
 	uuid(fcc24c18-b7a6-45a5-bd80-9dd95ab59302),
 	version(1.0),
 ]
 library OpenWithMenuLib
 {
 	importlib("stdole2.tlb");
+	[
+		uuid(33f3c901-789f-4e96-82d5-32b1cb204b40)
+	]
+	coclass OpenWithMenuImpl
+	{
+		[default] interface IOpenWithMenuImpl;
+	};
 };
-
+import "shobjidl.idl";

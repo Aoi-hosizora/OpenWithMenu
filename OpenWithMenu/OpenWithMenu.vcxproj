@@ -217,6 +217,7 @@
   <ItemGroup>
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="OpenWithMenuImpl.h" />
     <ClInclude Include="OpenWithMenu_i.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
@@ -238,6 +239,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="OpenWithMenu.cpp" />
+    <ClCompile Include="OpenWithMenuImpl.cpp" />
     <ClCompile Include="OpenWithMenu_i.c">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
@@ -263,8 +265,10 @@
     <ResourceCompile Include="OpenWithMenu.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="OpenMenuWithImpl.rgs" />
     <None Include="OpenWithMenu.def" />
     <None Include="OpenWithMenu.rgs" />
+    <None Include="OpenWithMenuImpl.rgs" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="OpenWithMenu.idl" />
