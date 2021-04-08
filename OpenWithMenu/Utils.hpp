@@ -100,21 +100,84 @@ public:
             auto command = ReadRegSz(sub_key, L"Command", L"");
             auto icon = ReadRegSz(sub_key, L"Icon", L"");
             auto runas = ReadRegSz(sub_key, L"Runas", L"0"); // empty for admin
-            RegCloseKey(sub_key);
+            auto style = ReadRegSz(sub_key, L"Style", L"");
+            auto use_x = ReadRegSz(sub_key, L"UseX", L"0"); // empty for extra options
 
             // check key's value
             name = TrimWstring(name, { L' ' });
             command = TrimWstring(command, { L' ' });
             icon = TrimWstring(icon, { L' ', L'"' });
             runas = TrimWstring(runas, { L' ' });
-            if (name.empty() || command.empty()) {
-                continue;
+            style = TrimWstring(style, { L' ' });
+            use_x = TrimWstring(use_x, { L' ' });
+            bool is_runas = runas.empty();
+            bool is_use_x = use_x.empty();
+
+            // save config
+            if (!is_use_x) {
+                if (!name.empty() && !command.empty()) {
+                    out->push_back(MenuItemConfig(name, command, icon, is_runas, ParseStyleFromString(style)));
+                }
+            } else {
+                // extra options
+                auto x_op = ReadRegSz(sub_key, L"XOp", L""); // open
+                auto x_file = ReadRegSz(sub_key, L"XFile", L""); // cmd.exe
+                auto x_param = ReadRegSz(sub_key, L"XParam", L""); // /C
+                x_op = TrimWstring(x_op, { L' ' });
+                x_file = TrimWstring(x_file, { L' ', L'"' });
+                x_param = TrimWstring(x_param, { L' ' });
+                if (!name.empty() && !x_op.empty()) {
+                    out->push_back(MenuItemConfig(name, command, icon, is_runas, ParseStyleFromString(style), x_op, x_file, x_param));
+                }
             }
 
-            out->push_back(MenuItemConfig(name, command, icon, runas.empty()));
+            RegCloseKey(sub_key);
         }
 
         return true;
+    }
+
+    /**
+     * @brief Parse SW_XXX value from SW_XXX string.
+     */
+    static int ParseStyleFromString(std::wstring s) {
+        if (s == L"" || s == L"SW_HIDE" || s == L"0") {
+            return SW_HIDE;
+        }
+        if (s == L"SW_SHOWNORMAL" || s == L"SW_NORMAL" || s == L"1") {
+            return SW_SHOWNORMAL;
+        }
+        if (s == L"SW_SHOWMINIMIZED" || s == L"2") {
+            return SW_SHOWMINIMIZED;
+        }
+        if (s == L"SW_SHOWMAXIMIZED" || s == L"SW_MAXIMIZE" || s == L"3") {
+            return SW_SHOWMAXIMIZED;
+        }
+        if (s == L"SW_SHOWNOACTIVATE" || s == L"4") {
+            return SW_SHOWNOACTIVATE;
+        }
+        if (s == L"SW_SHOW" || s == L"5") {
+            return SW_SHOW;
+        }
+        if (s == L"SW_MINIMIZE" || s == L"6") {
+            return SW_MINIMIZE;
+        }
+        if (s == L"SW_SHOWMINNOACTIVE" || s == L"7") {
+            return SW_SHOWMINNOACTIVE;
+        }
+        if (s == L"SW_SHOWNA" || s == L"8") {
+            return SW_SHOWNA;
+        }
+        if (s == L"SW_RESTORE" || s == L"9") {
+            return SW_RESTORE;
+        }
+        if (s == L"SW_SHOWDEFAULT" || s == L"10") {
+            return SW_SHOWDEFAULT;
+        }
+        if (s == L"SW_FORCEMINIMIZE" || s == L"SW_MAX" || s == L"11") {
+            return SW_FORCEMINIMIZE;
+        }
+        return SW_HIDE;
     }
 
     /**

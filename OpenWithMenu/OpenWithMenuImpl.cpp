@@ -105,16 +105,25 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::InvokeCommand(
         return S_OK;
     }
 
-    // other
+    // each item
     auto config = this->configs.at(idCmd - MENUID_BEGIN);
     std::wstring current_path;
     if (!Utils::GetFolderNameFromItemIDList(this->curr_folder, &current_path)) {
-        MessageBox(nullptr, L"Failed to get folder information.", L"Open with", MB_OK);
+        MessageBox(nullptr, L"Failed to get folder information.", config.name.c_str(), MB_OK);
         return S_FALSE;
     }
-    std::wstring op = config.runas ? L"runas" : L"open";
-    std::wstring command = L"/C " + Utils::ReplaceWstring(config.command, L"%V", current_path); // %V -> current_path
-    ShellExecute(nullptr, op.c_str(), L"cmd.exe", command.c_str(), current_path.c_str(), SW_HIDE);
+
+    // execute item
+    if (!config.use_x) {
+        std::wstring op = config.runas ? L"runas" : L"open"; // runas or open
+        std::wstring command = L"/C " + Utils::ReplaceWstring(config.command, L"%V", current_path); // %V -> current_path
+        ShellExecuteW(nullptr, op.c_str(), L"cmd.exe", command.c_str(), current_path.c_str(), config.style);
+    } else {
+        std::wstring op = Utils::ReplaceWstring(config.x_op, L"%V", current_path); // %V -> current_path
+        std::wstring file = Utils::ReplaceWstring(config.x_file, L"%V", current_path); // %V -> current_path
+        std::wstring param = Utils::ReplaceWstring(config.x_param, L"%V", current_path); // %V -> current_path
+        ShellExecuteW(nullptr, op.c_str(), file.c_str(), param.c_str(), current_path.c_str(), config.style);
+    }
 
     return S_OK;
 }
