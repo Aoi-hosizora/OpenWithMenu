@@ -72,11 +72,17 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
     }
 
     // out layer menu
+    auto menu_cfg = Utils::GetRegistryMenuConfig();
     MENUITEMINFO mii_out;
     mii_out.cbSize = sizeof(MENUITEMINFO);
     mii_out.fMask = MIIM_STRING | MIIM_SUBMENU;
-    mii_out.dwTypeData = L"Open folder with(&F)";
+    mii_out.dwTypeData = _wcsdup((menu_cfg.name + L"(&F)").c_str());
     mii_out.hSubMenu = sub_menu;
+    HBITMAP hbmp_out = Utils::GetSmallBitmapIconFromPath(menu_cfg.icon);
+    if (hbmp_out != nullptr) {
+        mii_out.fMask |= MIIM_BITMAP;
+        mii_out.hbmpItem = hbmp_out;
+    }
     InsertMenuItem(hmenu, indexMenu, true, &mii_out);
 
     return MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_NULL, cmd_count);
