@@ -53,13 +53,15 @@ public:
         std::wstring reg_root = L"SOFTWARE\\AoiHosizora\\OpenWithMenu";
         HKEY root_key;
         if (RegOpenKeyEx(HKEY_CURRENT_USER, reg_root.c_str(), 0, KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WOW64_64KEY, &root_key) != ERROR_SUCCESS) {
-            return MenuConfig(L"Open folder with", L"");
+            return MenuConfig(L"Open folder with", L"", L"Setting");
         }
         auto name = ReadRegSz(root_key, L"Name", L"Open folder with");
         auto icon = ReadRegSz(root_key, L"Icon", L"");
+        auto setting_name = ReadRegSz(root_key, L"SettingName", L"Setting");
         name = TrimWstring(name, { L' ' });
         icon = TrimWstring(icon, { L' ', L'"' });
-        return MenuConfig(name, icon);
+        setting_name = TrimWstring(setting_name, { L' ' });
+        return MenuConfig(name, icon, setting_name);
     }
 
     /**

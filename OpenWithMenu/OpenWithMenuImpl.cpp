@@ -49,7 +49,8 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
     UINT cmd_count = 0;
 
     // setting menu item
-    mii.dwTypeData = L"Setting(&S)";
+    auto menu_cfg = Utils::GetRegistryMenuConfig();
+    mii.dwTypeData = _wcsdup((menu_cfg.setting_name + L"(&S)").c_str());
     mii.wID = idCmdFirst + MENUID_SETTING;
     InsertMenuItem(sub_menu, 0, true, &mii);
     InsertMenuItem(sub_menu, 1, true, &mii_splitter);
@@ -72,7 +73,6 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
     }
 
     // out layer menu
-    auto menu_cfg = Utils::GetRegistryMenuConfig();
     MENUITEMINFO mii_out;
     mii_out.cbSize = sizeof(MENUITEMINFO);
     mii_out.fMask = MIIM_STRING | MIIM_SUBMENU;
@@ -119,10 +119,9 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::InvokeCommand(
         std::wstring command = L"/C " + Utils::ReplaceWstring(config.command, L"%V", current_path); // %V -> current_path
         ShellExecuteW(nullptr, op.c_str(), L"cmd.exe", command.c_str(), current_path.c_str(), config.style);
     } else {
-        std::wstring op = Utils::ReplaceWstring(config.x_op, L"%V", current_path); // %V -> current_path
         std::wstring file = Utils::ReplaceWstring(config.x_file, L"%V", current_path); // %V -> current_path
         std::wstring param = Utils::ReplaceWstring(config.x_param, L"%V", current_path); // %V -> current_path
-        ShellExecuteW(nullptr, op.c_str(), file.c_str(), param.c_str(), current_path.c_str(), config.style);
+        ShellExecuteW(nullptr, config.x_op.c_str(), file.c_str(), param.c_str(), current_path.c_str(), config.style);
     }
 
     return S_OK;
