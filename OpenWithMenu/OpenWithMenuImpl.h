@@ -50,6 +50,11 @@ private:
     LPCITEMIDLIST curr_folder = nullptr;
 
     /**
+     * @brief Menu config.
+     */
+    MenuConfig menu_config = {};
+
+    /**
      * @brief Menu item configs.
      */
     std::vector<MenuItemConfig> configs = {};

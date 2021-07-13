@@ -7,6 +7,7 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::Initialize(
     __in_opt HKEY hkeyProgID
 ) {
     this->curr_folder = pidlFolder;
+    this->menu_config = Utils::GetRegistryMenuConfig();
     Utils::ReadRegistryConfigs(&configs); // ignore error
     return S_OK;
 }
@@ -49,8 +50,7 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
     UINT cmd_count = 0;
 
     // setting menu item
-    auto menu_cfg = Utils::GetRegistryMenuConfig();
-    mii.dwTypeData = _wcsdup((menu_cfg.setting_name + L"(&S)").c_str());
+    mii.dwTypeData = _wcsdup((this->menu_config.setting_name + L"(&S)").c_str()); // setting
     mii.wID = idCmdFirst + MENUID_SETTING;
     InsertMenuItem(sub_menu, 0, true, &mii);
     InsertMenuItem(sub_menu, 1, true, &mii_splitter);
@@ -58,7 +58,7 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
 
     for (int i = 0; i < this->configs.size(); i++) {
         auto config = this->configs.at(i);
-        mii.dwTypeData = _wcsdup((std::to_wstring(i) + L": " + config.name).c_str());
+        mii.dwTypeData = _wcsdup((std::to_wstring(i + 1) + L": " + config.name).c_str()); // 0: XXX
         mii.wID = idCmdFirst + MENUID_BEGIN + i;
         HBITMAP hbmp = Utils::GetSmallBitmapIconFromPath(config.icon);
         if (hbmp != nullptr) {
@@ -76,9 +76,9 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::QueryContextMenu(
     MENUITEMINFO mii_out;
     mii_out.cbSize = sizeof(MENUITEMINFO);
     mii_out.fMask = MIIM_STRING | MIIM_SUBMENU;
-    mii_out.dwTypeData = _wcsdup((menu_cfg.name + L"(&F)").c_str());
+    mii_out.dwTypeData = _wcsdup((this->menu_config.name + L"(&F)").c_str());
     mii_out.hSubMenu = sub_menu;
-    HBITMAP hbmp_out = Utils::GetSmallBitmapIconFromPath(menu_cfg.icon);
+    HBITMAP hbmp_out = Utils::GetSmallBitmapIconFromPath(this->menu_config.icon);
     if (hbmp_out != nullptr) {
         mii_out.fMask |= MIIM_BITMAP;
         mii_out.hbmpItem = hbmp_out;
@@ -109,19 +109,20 @@ HRESULT STDMETHODCALLTYPE COpenWithMenuImpl::InvokeCommand(
     auto config = this->configs.at(idCmd - MENUID_BEGIN);
     std::wstring current_path;
     if (!Utils::GetFolderNameFromItemIDList(this->curr_folder, &current_path)) {
-        MessageBox(nullptr, L"Failed to get folder information.", config.name.c_str(), MB_OK);
+        MessageBox(nullptr, L"Failed to get current folder's information.", config.name.c_str(), MB_OK);
         return S_FALSE;
     }
 
     // execute item
-    if (!config.use_x) {
-        std::wstring op = config.runas ? L"runas" : L"open"; // runas or open
-        std::wstring command = L"/C " + Utils::ReplaceWstring(config.command, L"%V", current_path); // %V -> current_path
-        ShellExecuteW(nullptr, op.c_str(), L"cmd.exe", command.c_str(), current_path.c_str(), config.style);
-    } else {
-        std::wstring file = Utils::ReplaceWstring(config.x_file, L"%V", current_path); // %V -> current_path
-        std::wstring param = Utils::ReplaceWstring(config.x_param, L"%V", current_path); // %V -> current_path
-        ShellExecuteW(nullptr, config.x_op.c_str(), file.c_str(), param.c_str(), current_path.c_str(), config.style);
+    std::wstring op = config.op;
+    std::wstring file = Utils::ReplaceWstring(config.file, L"%V", current_path);
+    std::wstring param = Utils::ReplaceWstring(config.param, L"%V", current_path);
+    std::wstring dir = Utils::ReplaceWstring(config.dir, L"%V", current_path);
+    int style = config.style;
+    auto r = (int) ShellExecuteW(nullptr, op.c_str(), file.c_str(), param.c_str(), dir.c_str(), style);
+    if (r <= 32) {
+        std::wstring msg = L"Failed to execute the given command from config (errno = " + std::to_wstring(r) + L").";
+        MessageBox(nullptr, msg.c_str(), config.name.c_str(), MB_OK);
     }
 
     return S_OK;
