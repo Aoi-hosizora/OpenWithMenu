@@ -12,9 +12,7 @@ __pragma(warning(push)) __pragma(warning(disable:4996))
 class Utils {
 public:
 
-    /**
-     * @breif Represent the max path length.
-     */
+    // Represent the max path length.
     static const UINT MAX_PATH_LENGTH = 2048;
 
     /**
@@ -99,38 +97,23 @@ public:
 
             // get key's values
             auto name = ReadRegSz(sub_key, L"", L"");
-            auto command = ReadRegSz(sub_key, L"Command", L"");
             auto icon = ReadRegSz(sub_key, L"Icon", L"");
-            auto runas = ReadRegSz(sub_key, L"Runas", L"0"); // empty for admin
-            auto style = ReadRegSz(sub_key, L"Style", L"");
-            auto use_x = ReadRegSz(sub_key, L"UseX", L"0"); // empty for extra options
-
-            // check key's value
+            auto op = ReadRegSz(sub_key, L"Operation", L"open");
+            auto file = ReadRegSz(sub_key, L"File", L"");
+            auto param = ReadRegSz(sub_key, L"Parameter", L"");
+            auto dir = ReadRegSz(sub_key, L"Directory", L"%V");
+            auto style = ReadRegSz(sub_key, L"Style", L"SW_NORMAL");
             name = TrimWstring(name, { L' ' });
-            command = TrimWstring(command, { L' ' });
             icon = TrimWstring(icon, { L' ', L'"' });
-            runas = TrimWstring(runas, { L' ' });
+            op = TrimWstring(op, { L' ' });
+            file = TrimWstring(file, { L' ', L'"' });
+            param = TrimWstring(param, { L' ' });
+            dir = TrimWstring(dir, { L' ', L'"' });
             style = TrimWstring(style, { L' ' });
-            use_x = TrimWstring(use_x, { L' ' });
-            bool is_runas = runas.empty();
-            bool is_use_x = use_x.empty();
 
             // save config
-            if (!is_use_x) {
-                if (!name.empty() && !command.empty()) {
-                    out->push_back(MenuItemConfig(name, command, icon, is_runas, ParseStyleFromString(style)));
-                }
-            } else {
-                // extra options
-                auto x_op = ReadRegSz(sub_key, L"XOp", L""); // open
-                auto x_file = ReadRegSz(sub_key, L"XFile", L""); // cmd.exe
-                auto x_param = ReadRegSz(sub_key, L"XParam", L""); // /C
-                x_op = TrimWstring(x_op, { L' ' });
-                x_file = TrimWstring(x_file, { L' ', L'"' });
-                x_param = TrimWstring(x_param, { L' ' });
-                if (!name.empty() && !x_op.empty()) {
-                    out->push_back(MenuItemConfig(name, command, icon, is_runas, ParseStyleFromString(style), x_op, x_file, x_param));
-                }
+            if (!name.empty() && !file.empty()) {
+                out->push_back(MenuItemConfig(name, icon, op, file, param, dir, ParseStyleFromString(style)));
             }
 
             RegCloseKey(sub_key);
